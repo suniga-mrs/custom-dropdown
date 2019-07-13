@@ -1,5 +1,5 @@
 $.fn.myDropdown = function(options) {
-
+    
     let _options = new Object();
 
     if (!options) {
@@ -43,10 +43,24 @@ $.fn.myDropdown = function(options) {
     // }
 
     function replaceDOM(drpObj) {
-        let obj = $(drpObj)
-
+        let oldObj = $(drpObj)
         let newDOM = $(_defaults.template);
         let drpObj_items = $(drpObj).find('option');
+        let defaultText = '';
+        //add default first option
+        if (_options.hasOwnProperty('defaultText')) {
+            defaultText = _options.defaultText;
+        }
+        else {
+            defaultText = _defaults.defaultText;
+        }
+        //appends first default option        
+        let firstOption = $(_defaults.listTemplate);
+        firstOption.find('.dropdown-item').text(defaultText);
+        firstOption.find('.dropdown-item').attr('data-value', 0);
+        newDOM.find('ul.dropdown-menu.inner').append(firstOption);
+        //sets first option as displayed
+        newDOM.find('button.dropdown-toggle .filter-text-inner').text(defaultText);
 
         drpObj_items.each(function() {
             let _old = $(this);
@@ -57,32 +71,43 @@ $.fn.myDropdown = function(options) {
             
             newDOM.find('ul.dropdown-menu.inner').append(_new);
         });
-        
-
-
-        if (_options.hasOwnProperty('defaultText')) {
-            newDOM.find('button.dropdown-toggle .filter-text .filter-text-inner').text(_options.defaultText);
-        }
-        else {
-            newDOM.find('button.dropdown-toggle .filter-text .filter-text-inner').text(_defaults.defaultText);
-        }
-
-
 
         $(drpObj).replaceWith(newDOM);
-        newDOM.prepend(obj.hide());
+        newDOM.prepend(oldObj.hide());
 
-        eventHandlers(newDOM)
+        //select the first option
+        newDOM.find('select').val("0");
+
+        eventHandlers(newDOM, oldObj)
     }
 
-    function eventHandlers(newDOM) {
+    function eventHandlers(newDOM, oldObj) {
+        const drpContainer = newDOM;
         let btnToggle = newDOM.find('button.dropdown-toggle');
         let drpMenu = newDOM.find('button ~ .dropdown-menu:first');
-        
-        btnToggle.on('click', function() {
+        let listItems = drpMenu.find('li');
+
+        btnToggle.on('click', btnToggleClickEvent);
+
+        drpMenu.on('click', 'a', listItemClickEvent)
+
+        function btnToggleClickEvent(e) {
             drpMenu.toggleClass('show');
+            btnToggle.toggleClass('show');
             drpMenu.find('.inner:first').toggleClass('show');
-        });
+        }
+
+        function listItemClickEvent(e) {
+            // UI
+            listItems.find('a').each(function() {
+                $(this).removeClass('active')
+            })
+            $(this).addClass('active');
+            drpContainer.find('button .filter-text-inner').text($(this).text());
+
+            //change select DOM value
+            newDOM.find('select').val($(this).attr('data-value')).change();
+        }
     }
 
     return this.each(function() {
