@@ -98,6 +98,7 @@ $.fn.myDropdown = function(options) {
         }
 
         function listItemClickEvent(e) {
+            e.preventDefault();
             // UI
             listItems.find('a').each(function() {
                 $(this).removeClass('active')

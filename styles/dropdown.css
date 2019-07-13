@@ -134,8 +134,10 @@ select.custom-dropdown  {
    -webkit-box-shadow: none;
    box-shadow: none;
 }
-
-.custom-dropdown .dropdown-menu li {
+.custom-dropdown ul.dropdown-menu {
+   overflow-y: scroll;
+}
+.custom-dropdown ul.dropdown-menu li {
    position: relative;
 }
 
@@ -148,6 +150,7 @@ select.custom-dropdown  {
    background-color: transparent;
    border: 0;
    cursor: pointer;
+   font-size: 90%;
 }
 
 .dropdown-item.active,
