@@ -1,6 +1,19 @@
-$.fn.myDropdown = function() {
+$.fn.myDropdown = function(options) {
 
+    let _options = new Object();
+
+    if (!options) {
+        if (typeof options !== "object") {
+            return new Error('Dropdown: Option object is invalid');
+        }
+    }
+    else {
+        _options = new Object(options);
+    }
+    
+    
     let _defaults={
+        defaultText: 'Nothing selected',
         template: `
             <div class="custom-dropdown">
                 <button class="dropdown-toggle">
@@ -25,6 +38,9 @@ $.fn.myDropdown = function() {
         `
 
     };
+    // let _options = {
+    //     defaultText: 'Select fruit'
+    // }
 
     function replaceDOM(drpObj) {
         let obj = $(drpObj)
@@ -41,17 +57,33 @@ $.fn.myDropdown = function() {
             
             newDOM.find('ul.dropdown-menu.inner').append(_new);
         });
+        
+
+
+        if (_options.hasOwnProperty('defaultText')) {
+            newDOM.find('button.dropdown-toggle .filter-text .filter-text-inner').text(_options.defaultText);
+        }
+        else {
+            newDOM.find('button.dropdown-toggle .filter-text .filter-text-inner').text(_defaults.defaultText);
+        }
 
 
 
         $(drpObj).replaceWith(newDOM);
         newDOM.prepend(obj.hide());
+
+        eventHandlers(newDOM)
     }
 
-    function assignList(drpObj) {
-
+    function eventHandlers(newDOM) {
+        let btnToggle = newDOM.find('button.dropdown-toggle');
+        let drpMenu = newDOM.find('button ~ .dropdown-menu:first');
+        
+        btnToggle.on('click', function() {
+            drpMenu.toggleClass('show');
+            drpMenu.find('.inner:first').toggleClass('show');
+        });
     }
-
 
     return this.each(function() {
         // console.log($(this))

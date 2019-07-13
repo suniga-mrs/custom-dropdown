@@ -1,5 +1,7 @@
 $(document).ready(function() {
 
-    $('select.custom_dropdown').myDropdown();
+    $('select.custom_dropdown').myDropdown({
+        defaultText: "Select Fruit"
+    });
 
 });

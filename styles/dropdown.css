@@ -16,6 +16,7 @@ a {
 /* dropdown css */
 .custom-dropdown {
    font-family: sans-serif;
+   position: relative;
 }
 
 .custom-dropdown > .dropdown-toggle {
@@ -32,6 +33,7 @@ a {
    font-weight: 500;
    vertical-align: middle;
    outline: none;
+   cursor: pointer;
 }
 
 
@@ -88,6 +90,29 @@ a {
    color: #212529;
    text-align: left;
    list-style: none;
+   position: absolute;
+   width: 100%;
+
+   /* animated */
+   display: none;
+   max-height: 0;
+   opacity: 0;
+   overflow: hidden;
+
+   animation: wipe 0.5s normal forwards ease-in-out;
+}
+
+@keyframes wipe {
+   0% {
+      opacity: 0;
+   }
+   50% {
+      opacity: 0.75;
+   }
+   100% {
+      opacity: 1;
+      max-height: 150px;
+   }
 }
 
 .custom-dropdown .dropdown-menu.show {
@@ -100,6 +125,7 @@ a {
    border: 0;
    padding: 0;
    margin: 0;
+   height: 100%;;
    border-radius: 0;
    -webkit-box-shadow: none;
    box-shadow: none;
