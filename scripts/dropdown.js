@@ -12,7 +12,7 @@ $.fn.myDropdown = function(options) {
     }
     
     
-    let _defaults={
+    let _defaults = {
         defaultText: 'Nothing selected',
         template: `
             <div class="custom-dropdown">
@@ -38,9 +38,7 @@ $.fn.myDropdown = function(options) {
         `
 
     };
-    // let _options = {
-    //     defaultText: 'Select fruit'
-    // }
+
 
     function replaceDOM(drpObj) {
         let oldObj = $(drpObj)
@@ -90,6 +88,20 @@ $.fn.myDropdown = function(options) {
         btnToggle.on('click', btnToggleClickEvent);
 
         drpMenu.on('click', 'a', listItemClickEvent)
+
+        $(document).on('click', closeDropdown)
+
+        function closeDropdown(e) {
+
+            let trigger = $(drpContainer);
+
+            if (trigger !== e.target && !trigger.has(event.target).length) {
+                drpMenu.removeClass('show');
+                btnToggle.removeClass('show');
+                drpMenu.find('.inner:first').removeClass('show');
+            }
+
+        }
 
         function btnToggleClickEvent(e) {
             drpMenu.toggleClass('show');
